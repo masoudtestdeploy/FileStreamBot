@@ -16,9 +16,8 @@ routes = web.RouteTableDef()
 async def root_route_handler(request):
     bot_details = await StreamBot.get_me()
     return web.json_response({"status": "running",
-                              "maintained_by": "Avishkar_Patil",
                               "server_permission": "Open",
-                              "Telegram_Bot": '@'+bot_details.username})
+                              "Telegram": '@KenzoMovie'})
 
 
 @routes.get("/{message_id}")
@@ -27,6 +26,7 @@ async def root_route_handler(request):
 async def stream_handler(request):
     try:
         message_id = int(request.match_info['message_id'])
+        print(message_id)
         return await media_streamer(request, message_id)
     except ValueError as e:
         logging.error(e)
@@ -72,7 +72,7 @@ async def media_streamer(request, message_id: int):
             "Accept-Ranges": "bytes",
         }
     )
-
+    print(return_resp)
     if return_resp.status == 200:
         return_resp.headers.add("Content-Length", str(file_size))
 
